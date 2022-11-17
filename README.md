@@ -15,8 +15,8 @@ You can then point your Atlas instance to this Solr core (e.g. `solr.endpoint=ht
 ```sql
 select replace(vocabulary_version, '_', '') as vocab_version from vocabulary where vocabulary_id = 'None';
 ```
-
 If your vocabulary version and core do not match, WebAPI will not find the Solr core and it will continue to use the DB when querying the vocabulary.
+
 2. Clone this repo to your server/laptop.
 3. Copy the JDBC driver file needed to connect to your OMOP Vocabulary schema to the directory.
 4. Save the `.env-sample` file as `.env` and replace the environment variables with the appropriate values for your OMOP Vocabulary setup.
@@ -25,14 +25,15 @@ If your vocabulary version and core do not match, WebAPI will not find the Solr 
 
 There are two methods to starting Broadsea-Solr:
 
-1. Without auto-starting the dataimport (meaning, you will run that step at a later time in the Solr admin console)
+1. **Without auto-starting the dataimport (meaning, you will run that step at a later time in the Solr admin console)**
   - Within the cloned directory, run
     ```bash
     docker-compose up -d
     ```
-  - From the SOLR Admin screen (`http://localhost:8983/solr/#/`), build the core by using the 'Core Selector' dropdown in the left-hand menu. Select the `v5.0_31-OCT-22` core from the drop down, and then in the sub-menu that appears, select `Dataimport` and then used the 'Execute' button.
-  - Once the execution of the core indexing is complete, you can use the Solr "Query" tool under the core sub-menu to make sure the core is working properly before moving to WebAPI. A sample query you can use is: `query:metformin`
-2. With dataimport auto-started
+  - Once ready to run the dataimport, go to the SOLR Admin screen (`http://localhost:8983/solr/#/`), and build the core by using the 'Core Selector' dropdown in the left-hand menu.
+    - Select the `v5.0_31-OCT-22` core from the drop down, and then in the sub-menu that appears, select `Dataimport` and then used the 'Execute' button.
+    - Once the execution of the core indexing is complete, you can use the Solr "Query" tool under the core sub-menu to make sure the core is working properly before moving to WebAPI. A sample query you can use is: `query:metformin`
+2. **With dataimport auto-started**
   - Within the cloned directory, run
     ```bash
     docker-compose --profile dataimport up -d
