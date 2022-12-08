@@ -760,11 +760,11 @@
 	<lst name="defaults">
 		<str name="config">data-config.xml</str>
 		<lst name="datasource">
-			<str name="name">@vocabDatabaseSchema</str>
-			<str name="driver">@vocabJdbcDriverPath</str>
-			<str name="url">@vocabJdbcUrl</str>
-			<str name="user">@vocabJdbcUser</str>
-			<str name="password">@vocabJdbcPassword</str>
+			<str name="name">omop_vocab</str>
+			<str name="driver">${VOCAB_JDBC_DRIVER_PATH}</str>
+			<str name="url">${VOCAB_JDBC_URL}</str>
+			<str name="user">${VOCAB_JDBC_USER}</str>
+			<str name="password">${VOCAB_JDBC_PASSWORD}</str>
 	 </lst>
 </lst>
 </requestHandler>

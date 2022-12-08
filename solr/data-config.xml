@@ -2,7 +2,7 @@
 
  <document name='concepts'>
    <entity name="concept"
-           dataSource="@vocabDatabaseSchema"
+           dataSource="omop_vocab"
            pk="concept_id"
            query="select c.concept_id,
        c.concept_code,
@@ -16,9 +16,9 @@
        v.vocabulary_name,
        c.valid_start_date,
        c.valid_end_date
-       from @vocabDatabaseSchema.concept as c
-       join @vocabDatabaseSchema.domain as d on c.domain_id = d.domain_id
-       join @vocabDatabaseSchema.vocabulary as v on c.vocabulary_id = v.vocabulary_id"
+       from ${dataimporter.request.vocab_database_schema}.concept as c
+       join ${dataimporter.request.vocab_database_schema}.domain as d on c.domain_id = d.domain_id
+       join ${dataimporter.request.vocab_database_schema}.vocabulary as v on c.vocabulary_id = v.vocabulary_id"
             preImportDeleteQuery="*:*">
 
      <field column="concept_id" name="id" />

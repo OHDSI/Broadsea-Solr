@@ -31,9 +31,13 @@ There are two methods to starting Broadsea-Solr:
     docker-compose up -d
     ```
   - Once ready to run the dataimport, go to the SOLR Admin screen (`http://localhost:8983/solr/#/`), and build the core by using the 'Core Selector' dropdown in the left-hand menu.
-    - Select the `v5.0_31-OCT-22` core from the drop down, and then in the sub-menu that appears, select `Dataimport` and then used the 'Execute' button.
+    - Select the `v5.0_31-OCT-22` core from the drop down, and then in the sub-menu that appears, select `Dataimport` from the left navigation
+    - Select 'full-import' from the Command dropdown, check the 'Commit' box, and select 'concept' from the Entity dropdown.
+    - Enter `vocab_database_schema=<your vocab schema name>` in the Custom Parameters field.
+    - Hit the 'Execute' button.
     - Once the execution of the core indexing is complete, you can use the Solr "Query" tool under the core sub-menu to make sure the core is working properly before moving to WebAPI. A sample query you can use is: `query:metformin`
-2. **With dataimport auto-started**
+
+2. **With dataimport auto-started (recommended)**
   - Within the cloned directory, run
     ```bash
     docker-compose --profile dataimport up -d
