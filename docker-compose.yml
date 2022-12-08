@@ -14,9 +14,13 @@ services:
         -DVOCAB_JDBC_PASSWORD=${VOCAB_JDBC_PASSWORD}
     volumes:
       - ./${VOCAB_JDBC_FILE_NAME}:/opt/solr-8.11.1/server/lib/${VOCAB_JDBC_FILE_NAME}:ro
-      - ./solr:/var/solr/data/$VOCAB_VERSION
+      - ./solr:/tmp/solr_config:ro
     ports:
       - "8983:8983"
+    command:
+      - solr-precreate
+      - ${VOCAB_VERSION}
+      - /tmp/solr_config
     healthcheck:
       test: curl --fail http://localhost:8983 || exit 1
       interval: 10s
