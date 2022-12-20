@@ -1,29 +1,31 @@
 version: '3.9'
 
 services:
+
   vocab-core:
     container_name: vocab-core
-    build:
-      context: ./solr
-      dockerfile: Dockerfile
-      args:
-        VOCAB_VERSION: ${VOCAB_VERSION}
-        VOCAB_DATABASE_SCHEMA: ${VOCAB_DATABASE_SCHEMA}
-        VOCAB_JDBC_FILE_NAME: ${VOCAB_JDBC_FILE_NAME}
-        VOCAB_JDBC_DRIVER_PATH: ${VOCAB_JDBC_DRIVER_PATH}
-        VOCAB_JDBC_URL: ${VOCAB_JDBC_URL}
-        VOCAB_JDBC_USER: ${VOCAB_JDBC_USER}
-        VOCAB_JDBC_PASSWORD: ${VOCAB_JDBC_PASSWORD}
+    image: solr:8.11.1
+    environment: 
+      SOLR_OPTS: 
+        -DVOCAB_VERSION=${VOCAB_VERSION}
+        -DVOCAB_JDBC_DRIVER_PATH=${VOCAB_JDBC_DRIVER_PATH}
+        -DVOCAB_JDBC_URL=${VOCAB_JDBC_URL}
+        -DVOCAB_JDBC_USER=${VOCAB_JDBC_USER}
+        -DVOCAB_JDBC_PASSWORD=${VOCAB_JDBC_PASSWORD}
     volumes:
       - ./${VOCAB_JDBC_FILE_NAME}:/opt/solr-8.11.1/server/lib/${VOCAB_JDBC_FILE_NAME}:ro
+      - ./solr:/tmp/solr_config:ro
     ports:
       - "8983:8983"
+    command:
+      - solr-precreate
+      - ${VOCAB_VERSION}
+      - /tmp/solr_config
     healthcheck:
       test: curl --fail http://localhost:8983 || exit 1
       interval: 10s
       timeout: 5s
       retries: 5
-
   run-dataimport:
     container_name: run-dataimport
     image: curlimages/curl
@@ -31,4 +33,4 @@ services:
     depends_on:
       vocab-core:
         condition: service_healthy
-    command: curl -s http://vocab-core:8983/solr/${VOCAB_VERSION}/dataimport?command=full-import
+    command: curl -d "vocab_database_schema=${VOCAB_DATABASE_SCHEMA}" -X POST http://vocab-core:8983/solr/${VOCAB_VERSION}/dataimport?command=full-import&entity=concept
